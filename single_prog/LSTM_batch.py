@@ -5,6 +5,7 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("device = {}".format(device))
 vocab_size = 2  # 語彙数 0 or 1
 embed_size = 5  # embeddingのサイズ
 hidden_size = 5  # lstmの隠れ層のサイズ
