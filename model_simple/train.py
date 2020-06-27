@@ -23,10 +23,10 @@ def parse_arg():
     return parser.parse_args()
 
 
-def validation(model, loss_func, inputs, targets):
+def validation(model, loss_func, inputs, inp_len, targets):
     avg_loss = 0
     with torch.no_grad():
-        y = model(inputs)
+        y = model(inputs, inp_len)
         avg_loss += loss_func(y[-1], targets)
     return avg_loss / len(targets)
 
@@ -35,12 +35,23 @@ def output_log(epoch, loss):
     print("{}, {}".format(epoch, loss), flush=True)
 
 
+def prepare_data(x, y, device):
+    x_len = torch.tensor([len(v) for v in x], dtype=torch.long, device=device)
+    x_list = [torch.tensor(v, dtype=torch.long, device=device) for v in x]
+    x_list = pad_sequence(x_list, batch_first=True)
+    x_len, perm_idx = x_len.sort(0, descending=True)
+    x_list = x_list[perm_idx]
+    y_list = torch.tensor(y, dtype=torch.float, device=device)
+    y_list = y_list[perm_idx]
+    return x_list, x_len, y_list
+
+
 def main(epoch, n_input, n_embed, n_hidden, n_layers):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     x_list = [[1, 2, 3, 4], [4, 5, 6], [7, 8, 9], [2, 3, 4, 5]]
-    inputs = [torch.tensor(x, dtype=torch.long, device=device) for x in x_list]
-    targets = torch.tensor([[0], [1], [0], [1]], dtype=torch.float, device=device)
+    y_list = [[0], [1], [0], [1]]
+    inputs, inp_len, targets = prepare_data(x_list, y_list, device)
 
     n_output = len(targets[0])
 
@@ -48,19 +59,19 @@ def main(epoch, n_input, n_embed, n_hidden, n_layers):
     loss_func = nn.MSELoss()
     optimizer = optim.SGD(model.parameters(), lr=0.1)
 
-    output_log('start', validation(model, loss_func, inputs, targets))
+    output_log('start', validation(model, loss_func, inputs, inp_len, targets))
 
     for epoch in range(args.epoch):
         model.zero_grad()
-        y = model(inputs)
+        y = model(inputs, inp_len)
         loss = loss_func(y[-1], targets)
         loss.backward()
         optimizer.step()
 
         if epoch % 100 == 0:
-            output_log(epoch+1, validation(model, loss_func, inputs, targets))
+            output_log(epoch+1, validation(model, loss_func, inputs, inp_len, targets))
 
-    output_log('last', validation(model, loss_func, inputs, targets))
+    output_log('last', validation(model, loss_func, inputs, inp_len, targets))
 
 
 if __name__ == '__main__':
