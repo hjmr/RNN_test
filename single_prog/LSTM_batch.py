@@ -11,6 +11,8 @@ embed_size = 5  # embeddingのサイズ
 hidden_size = 5  # lstmの隠れ層のサイズ
 embedding = nn.Embedding(vocab_size, embed_size, padding_idx=0)  # embedding
 lstm = nn.LSTM(embed_size, hidden_size, batch_first=True)  # LSTM(2,7,2) →(2,7,5)
+embedding.to(device)
+lstm.to(device)
 
 # 入力データ準備
 inputs = [[1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 0, 0]]  # (2,7)のデータ ※0はpaddingを想定
