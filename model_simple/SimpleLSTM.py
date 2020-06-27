@@ -17,7 +17,7 @@ class SimpleLSTM(nn.Module):
         self.device = device
 
     def make_batch(self, x_list):
-        x_len = torch.LongTensor([len(x) for x in x_list], device=self.device)
+        x_len = torch.tensor([len(x) for x in x_list], dtype=torch.long, device=self.device)
         x_list = pad_sequence(x_list, batch_first=True)
         x_len, perm_idx = x_len.sort(0, descending=True)
         x_list = x_list[perm_idx]

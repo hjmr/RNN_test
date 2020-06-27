@@ -39,8 +39,7 @@ def main(epoch, n_input, n_embed, n_hidden, n_layers):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     x_list = [[1, 2, 3, 4], [4, 5, 6], [7, 8, 9], [2, 3, 4, 5]]
-    # inputs = make_batch(x_list, device)
-    inputs = [torch.LongTensor(x, device=device) for x in x_list]
+    inputs = [torch.tensor(x, dtype=torch.long, device=device) for x in x_list]
     targets = torch.tensor([[0], [1], [0], [1]], dtype=torch.float, device=device)
 
     n_output = len(targets[0])
