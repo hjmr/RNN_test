@@ -5,12 +5,8 @@ description = ""
 authors = ["hjmr <2620990+hjmr@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
-torch = "*"
-torchvision = "*"
-matplotlib = "*"
-scikit-learn = "*"
-japanize-matplotlib = "*"
+python = "^3.9"
+torch = {path = "../../packages/torch-1.8.0a0+f074d2d-cp39-cp39-macosx_11_0_arm64.whl"}
 
 [tool.poetry.dev-dependencies]
 autopep8 = "*"
