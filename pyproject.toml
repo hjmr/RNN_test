@@ -3,16 +3,14 @@ name = "pytorch-rnn-test"
 version = "0.1.0"
 description = ""
 authors = ["hjmr <2620990+hjmr@users.noreply.github.com>"]
+readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-torch = "^1.9.0"
-numpy = "^1.20.3"
+python = "^3.12"
+torch = "^2.3.0"
+numpy = "^1.26.4"
 
-[tool.poetry.dev-dependencies]
-autopep8 = "*"
-pylint = "*"
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
